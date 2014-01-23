@@ -3,7 +3,7 @@ module Jaxrtech.ArithmeticEncoding.CommonTypes
 
 /// A range bounded at two points
 [<NoComparison>]
-type ValueRange(startPoint: float, endPoint: float) =
+type ValueRange(startPoint: bignum, endPoint: bignum) =
     member this.StartPoint = startPoint
     member this.EndPoint = endPoint
 
@@ -13,7 +13,7 @@ type ValueRange(startPoint: float, endPoint: float) =
 
     /// Returns the middle point between the two points
     member this.Middle =
-        (this.EndPoint + this.StartPoint) / 2.0
+        (this.EndPoint + this.StartPoint) / 2N
 
     /// Returns if the range contains a value exclusively
     member this.Contains value =
@@ -57,7 +57,7 @@ module ValueRanges =
         fun (range:'T) -> range.EndPoint
 
 /// Data point holding a percentage range
-type PercentageDataPoint = { Data: byte; Percent: float }
+type PercentageDataPoint = { Data: byte; Percent: bignum }
 
 /// Data point represented by a range
 type RangeDataPoint(data: byte, range: ValueRange) =

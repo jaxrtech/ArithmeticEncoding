@@ -15,7 +15,7 @@ module Encoder =
     // TODO: Add an option to disable checks. Have the `ValueRanges.check` just be passed with and id map or something
 
     /// Encodes a buffer of bytes into a tuple of the percentage table and the represented range of the enocded data
-    let encodeBuffer buffer =
+    let encodeBuffer (buffer:byte list) =
         let table = buffer
                     |> Data.toPercentages
                     |> PercentageDataPoints.toRanges
@@ -36,10 +36,10 @@ module Encoder =
 
 module Decoder =
     /// Decodes a point encoded using arithmetic encodeding from range table and the length of the encoded data
-    let decodeBuffer (rangeTable:RangeDataPoint list) (point:float) (length:int) =
+    let decodeBuffer (rangeTable:RangeDataPoint list) (point:bignum) (length:int) =
         Point.decode rangeTable point length
 
-    let decodeString (rangeTable:RangeDataPoint list) (point:float) (length:int) =
+    let decodeString (rangeTable:RangeDataPoint list) (point:bignum) (length:int) =
         decodeBuffer rangeTable point length
         |> List.toArray
         |> decodeString

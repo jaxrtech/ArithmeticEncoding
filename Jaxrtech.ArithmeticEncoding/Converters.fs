@@ -3,7 +3,7 @@
 open System
 
 /// Returns the entire range used for encoding
-let entireRange = ValueRange(0.0, 1.0)
+let entireRange = ValueRange(0N, 1N)
 
 module PercentageDataPoints =
     /// Converts a PercentageDataPoint list to a RangeDataPoint list like set of a stacks
@@ -11,7 +11,7 @@ module PercentageDataPoints =
         match (output, input) with
         | (output, []) -> output
         | ([], cur::input) -> 
-            let ret = RangeDataPoint(cur.Data, ValueRange(0.0, cur.Percent))
+            let ret = RangeDataPoint(cur.Data, ValueRange(0N, cur.Percent))
             iter [ret] input
         | (prev::output, cur::input) ->
             let startPoint = prev.EndPoint
@@ -73,9 +73,9 @@ module Data =
     let toPercentages data =
         let counts = count data
         let total = total counts
-
+        
         counts
-        |> List.map (fun x -> (fst x, float (snd x) / float total))
+        |> List.map (fun x -> (fst x, (bignum.FromInt (snd x)) / (bignum.FromInt (total))))
         |> List.map (fun x -> { Data = fst x; Percent = snd x })
 
     let toRangeDataPoints buffer = 
@@ -84,7 +84,7 @@ module Data =
         |> PercentageDataPoints.toRanges
 
 module Point =
-    let rec private iter (decoded:byte list) (rangeTable:RangeDataPoint list) (point:float) (length:int) =
+    let rec private iter (decoded:byte list) (rangeTable:RangeDataPoint list) (point:bignum) (length:int) =
         match length with
         | 0 -> decoded
         | _ ->
@@ -98,5 +98,5 @@ module Point =
             iter decoded rangeTable nextPoint (length - 1)
     
     /// Decodes a point encoded using arithemtic encoding by using a range table and the length of the encoded data
-    let decode (rangeTable:RangeDataPoint list) (point:float) (length:int) =
+    let decode (rangeTable:RangeDataPoint list) (point:bignum) (length:int) =
         iter [] rangeTable point length

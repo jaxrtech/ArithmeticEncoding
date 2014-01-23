@@ -10,8 +10,8 @@ module ValueRanges =
         let ranges = ranges |> List.sortBy ValueRanges.startPointProjection
 
         let startPoint = ranges.Head.StartPoint
-        let endPoint = let p = ranges.[ranges.Length - 1].EndPoint
-                       Math.Round(p, 10) // account for floating point error
+        let endPoint = ranges.[ranges.Length - 1].EndPoint
+
         assert (startPoint = entireRange.StartPoint)
         assert (endPoint = entireRange.EndPoint)
 
